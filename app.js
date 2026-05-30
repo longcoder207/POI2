@@ -321,37 +321,47 @@ function createPoiEntity(poi) {
   });
 
   wrapper.setAttribute("look-at", "[gps-camera]");
-  wrapper.setAttribute("scale", "18 18 18");
+  wrapper.setAttribute("scale", "20 20 20");
   wrapper.setAttribute("data-poi-id", poi.id);
 
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
-  // Das eigentliche POI-Element
+  // POI-Punkt
   const marker = document.createElement("a-sphere");
   marker.setAttribute("radius", "0.35");
   marker.setAttribute("color", "#ffcc00");
-  marker.setAttribute("position", "0 0.35 0");
+  marker.setAttribute("position", "0 0 0");
 
-  // Hintergrund hinter dem Namen
+  // Text-Gruppe über dem Punkt
+  const labelGroup = document.createElement("a-entity");
+  labelGroup.setAttribute("position", "0 1.1 0");
+  labelGroup.setAttribute("look-at", "[gps-camera]");
+
+  // Hintergrund hinter dem Text
   const labelBackground = document.createElement("a-plane");
-  labelBackground.setAttribute("width", "3.8");
-  labelBackground.setAttribute("height", "0.7");
+  labelBackground.setAttribute("width", "4.8");
+  labelBackground.setAttribute("height", "0.9");
   labelBackground.setAttribute("color", "#000000");
-  labelBackground.setAttribute("opacity", "0.65");
-  labelBackground.setAttribute("position", "0 1.2 -0.02");
+  labelBackground.setAttribute("opacity", "0.75");
+  labelBackground.setAttribute("position", "0 0 -0.03");
 
-  // Nur der Name aus pois.json über dem POI-Element
+  // Nur der Name aus pois.json
   const label = document.createElement("a-text");
-  label.setAttribute("value", poi.name);
+  label.setAttribute("value", poi.name || "POI");
   label.setAttribute("align", "center");
+  label.setAttribute("anchor", "center");
+  label.setAttribute("baseline", "center");
   label.setAttribute("color", "#ffffff");
-  label.setAttribute("width", "6");
-  label.setAttribute("position", "0 1.2 0");
+  label.setAttribute("width", "5.5");
+  label.setAttribute("side", "double");
+  label.setAttribute("position", "0 0 0.03");
+
+  labelGroup.appendChild(labelBackground);
+  labelGroup.appendChild(label);
 
   wrapper.appendChild(marker);
-  wrapper.appendChild(labelBackground);
-  wrapper.appendChild(label);
+  wrapper.appendChild(labelGroup);
 
   wrapper.addEventListener("click", () => {
     showPoiPanel(poi);
