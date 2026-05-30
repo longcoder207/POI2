@@ -47,21 +47,56 @@
     </button>
   </section>
 
-  <a-scene
-    embedded
-    vr-mode-ui="enabled: false"
-    renderer="antialias: true; alpha: true"
-    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
-  >
-    <a-camera
-      gps-camera
-      rotation-reader
-      look-controls="touchEnabled: false; mouseEnabled: false"
-      wasd-controls="enabled: false"
-      cursor="rayOrigin: mouse"
-      raycaster="objects: .clickable"
-    ></a-camera>
-  </a-scene>
+  <!-- Hier wird die AR-Szene je nach Gerät eingefügt -->
+  <div id="sceneContainer"></div>
+
+  <script>
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    const isAndroid = /android/i.test(userAgent);
+
+    const isIOS =
+      /iPad|iPhone|iPod/.test(userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    /*
+      iPhone/iOS:
+      Deine bisher funktionierende Variante mit videoTexture: true
+
+      Android:
+      Ohne videoTexture, weil das auf manchen Android-Geräten
+      zu schwarzem Bild oder Webcam error führen kann.
+    */
+    const arjsSettings = isAndroid
+      ? "sourceType: webcam; debugUIEnabled: false;"
+      : "sourceType: webcam; videoTexture: true; debugUIEnabled: false;";
+
+    const sceneContainer = document.querySelector("#sceneContainer");
+
+    sceneContainer.innerHTML = `
+      <a-scene
+        embedded
+        vr-mode-ui="enabled: false"
+        renderer="antialias: true; alpha: true"
+        arjs="${arjsSettings}"
+      >
+        <a-camera
+          gps-camera
+          rotation-reader
+          look-controls="touchEnabled: false; mouseEnabled: false"
+          wasd-controls="enabled: false"
+          cursor="rayOrigin: mouse"
+          raycaster="objects: .clickable"
+        ></a-camera>
+      </a-scene>
+    `;
+
+    console.log("Gerät erkannt:", {
+      isAndroid,
+      isIOS,
+      arjsSettings
+    });
+  </script>
 
   <script src="./app.js"></script>
 </body>
