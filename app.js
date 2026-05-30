@@ -6,11 +6,13 @@
 // Für Tests kannst du den Wert z. B. auf 100000 setzen.
 const MAX_DISTANCE_METERS = 1500;
 
-// Darstellungsgrößen für POIs
-// Diese Werte machen Kugel und Text deutlich größer.
-const POI_MIN_SCALE = 250;
-const POI_MAX_SCALE = 400;
-const POI_SCALE_DISTANCE_FACTOR = 0.15;
+// Direkte Darstellungsgrößen.
+// Wenn Kugel/Text zu klein sind, diese Werte erhöhen.
+const MARKER_RADIUS = 8;
+const LABEL_HEIGHT_ABOVE_MARKER = 18;
+const LABEL_BACKGROUND_WIDTH = 55;
+const LABEL_BACKGROUND_HEIGHT = 14;
+const LABEL_TEXT_WIDTH = 50;
 
 let userPosition = null;
 let lastGpsPosition = null;
@@ -158,12 +160,6 @@ function setupLocateButton() {
     hidePoiPanel();
 
     setStatus("Bestimme Standort... Bitte Handy kurz ruhig halten.");
-
-    /*
-      Wichtig:
-      Wir benutzen nicht sofort den alten Standort.
-      Die App wartet auf das nächste gps-camera-update-position Event von AR.js.
-    */
   });
 }
 
@@ -331,31 +327,29 @@ function createPoiEntity(poi) {
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
-  // Responsive Größe abhängig von der Entfernung
-  const poiScale = getPoiScale(poi.distance || 0);
-  wrapper.setAttribute("scale", `${poiScale} ${poiScale} ${poiScale}`);
+  // Wichtig:
+  // Keine wrapper.setAttribute("scale", "...").
+  // Wir setzen stattdessen echte Größen auf Kugel/Text/Hintergrund.
 
   // Gelber POI-Punkt
   const marker = document.createElement("a-sphere");
-  marker.setAttribute("radius", "0.28");
+  marker.setAttribute("radius", String(MARKER_RADIUS));
   marker.setAttribute("color", "#ffcc00");
   marker.setAttribute("position", "0 0 0");
 
   // Gruppe für Text + Hintergrund
   const labelGroup = document.createElement("a-entity");
-  labelGroup.setAttribute("position", "0 0.75 0");
-
-  // Text-Gruppe schaut immer zur Kamera
+  labelGroup.setAttribute("position", `0 ${LABEL_HEIGHT_ABOVE_MARKER} 0`);
   labelGroup.setAttribute("look-at", "[gps-camera]");
 
   // Hintergrund hinter dem Namen
   const labelBackground = document.createElement("a-plane");
-  labelBackground.setAttribute("width", "2.8");
-  labelBackground.setAttribute("height", "0.7");
+  labelBackground.setAttribute("width", String(LABEL_BACKGROUND_WIDTH));
+  labelBackground.setAttribute("height", String(LABEL_BACKGROUND_HEIGHT));
   labelBackground.setAttribute("color", "#000000");
-  labelBackground.setAttribute("opacity", "0.8");
+  labelBackground.setAttribute("opacity", "0.85");
   labelBackground.setAttribute("side", "double");
-  labelBackground.setAttribute("position", "0 0 -0.02");
+  labelBackground.setAttribute("position", "0 0 -0.2");
 
   // Name aus pois.json
   const label = document.createElement("a-text");
@@ -364,9 +358,9 @@ function createPoiEntity(poi) {
   label.setAttribute("anchor", "center");
   label.setAttribute("baseline", "center");
   label.setAttribute("color", "#ffffff");
-  label.setAttribute("width", "3.2");
+  label.setAttribute("width", String(LABEL_TEXT_WIDTH));
   label.setAttribute("side", "double");
-  label.setAttribute("position", "0 0 0.03");
+  label.setAttribute("position", "0 0 0.2");
 
   labelGroup.appendChild(labelBackground);
   labelGroup.appendChild(label);
@@ -378,10 +372,11 @@ function createPoiEntity(poi) {
     showPoiPanel(poi);
   });
 
-  console.log("POI mit Label erstellt:", {
+  console.log("POI erstellt:", {
     name: poi.name,
     distance: poi.distance,
-    scale: poiScale
+    markerRadius: MARKER_RADIUS,
+    labelTextWidth: LABEL_TEXT_WIDTH
   });
 
   return wrapper;
@@ -420,15 +415,6 @@ function hidePoiPanel() {
 
 function setStatus(message) {
   statusEl.innerHTML = message;
-}
-
-function getPoiScale(distance) {
-  const scale = POI_MIN_SCALE + distance * POI_SCALE_DISTANCE_FACTOR;
-
-  return Math.min(
-    POI_MAX_SCALE,
-    Math.max(POI_MIN_SCALE, scale)
-  );
 }
 
 function distanceInMeters(lat1, lon1, lat2, lon2) {
