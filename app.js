@@ -7,12 +7,13 @@
 const MAX_DISTANCE_METERS = 1500;
 
 // Direkte Darstellungsgrößen.
-// Wenn Kugel/Text zu klein sind, diese Werte erhöhen.
+// Diese Werte bestimmen Kugel, Text und Texthintergrund.
 const MARKER_RADIUS = 8;
-const LABEL_HEIGHT_ABOVE_MARKER = 18;
-const LABEL_BACKGROUND_WIDTH = 55;
-const LABEL_BACKGROUND_HEIGHT = 14;
-const LABEL_TEXT_WIDTH = 50;
+const LABEL_HEIGHT_ABOVE_MARKER = 24;
+const LABEL_BACKGROUND_WIDTH = 90;
+const LABEL_BACKGROUND_HEIGHT = 28;
+const LABEL_TEXT_WIDTH = 24;
+const LABEL_TEXT_SCALE = 3.5;
 
 let userPosition = null;
 let lastGpsPosition = null;
@@ -327,9 +328,8 @@ function createPoiEntity(poi) {
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
-  // Wichtig:
-  // Keine wrapper.setAttribute("scale", "...").
-  // Wir setzen stattdessen echte Größen auf Kugel/Text/Hintergrund.
+  // Keine Wrapper-Skalierung.
+  // Wir setzen die realen Objektgrößen direkt auf Kugel, Text und Hintergrund.
 
   // Gelber POI-Punkt
   const marker = document.createElement("a-sphere");
@@ -360,6 +360,7 @@ function createPoiEntity(poi) {
   label.setAttribute("color", "#ffffff");
   label.setAttribute("width", String(LABEL_TEXT_WIDTH));
   label.setAttribute("side", "double");
+  label.setAttribute("scale", `${LABEL_TEXT_SCALE} ${LABEL_TEXT_SCALE} ${LABEL_TEXT_SCALE}`);
   label.setAttribute("position", "0 0 0.2");
 
   labelGroup.appendChild(labelBackground);
@@ -376,7 +377,8 @@ function createPoiEntity(poi) {
     name: poi.name,
     distance: poi.distance,
     markerRadius: MARKER_RADIUS,
-    labelTextWidth: LABEL_TEXT_WIDTH
+    labelTextWidth: LABEL_TEXT_WIDTH,
+    labelTextScale: LABEL_TEXT_SCALE
   });
 
   return wrapper;
