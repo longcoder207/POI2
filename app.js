@@ -10,10 +10,10 @@ const MAX_DISTANCE_METERS = 1500;
 // Diese Werte bestimmen Kugel, Text und Texthintergrund.
 const MARKER_RADIUS = 8;
 const LABEL_HEIGHT_ABOVE_MARKER = 24;
-const LABEL_BACKGROUND_WIDTH = 90;
-const LABEL_BACKGROUND_HEIGHT = 28;
-const LABEL_TEXT_WIDTH = 24;
-const LABEL_TEXT_SCALE = 3.5;
+const LABEL_BACKGROUND_WIDTH = 140;
+const LABEL_BACKGROUND_HEIGHT = 45;
+const LABEL_TEXT_WIDTH = 18;
+const LABEL_TEXT_SCALE = 7;
 
 let userPosition = null;
 let lastGpsPosition = null;
