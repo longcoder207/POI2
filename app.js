@@ -3,7 +3,7 @@
 // ------------------------------------------------------------
 
 // POIs werden nur angezeigt, wenn sie innerhalb dieses Radius liegen.
-const MAX_DISTANCE_METERS = 1500;
+const MAX_DISTANCE_METERS = 5000;
 
 // AR-Labels werden einmalig gerendert, sobald GPS verfügbar ist.
 let poisRendered = false;
