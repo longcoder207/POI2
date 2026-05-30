@@ -32,8 +32,9 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
-/* Button für iOS-Bewegungssensoren */
-#permissionButton {
+/* Buttons */
+#permissionButton,
+#locateButton {
   pointer-events: auto;
   border: 0;
   border-radius: 12px;
@@ -43,11 +44,16 @@ body {
   font-weight: 700;
   font-size: 13px;
   cursor: pointer;
-  display: none;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
 }
 
-#permissionButton:active {
+#permissionButton {
+  display: none;
+}
+
+#permissionButton:active,
+#locateButton:active {
   transform: scale(0.98);
 }
 
@@ -92,12 +98,7 @@ body {
   transform: scale(0.98);
 }
 
-/* Hilfsklasse */
-.hidden {
-  display: none !important;
-}
-
-/* A-Frame / AR.js soll den gesamten Screen nutzen */
+/* A-Frame / AR.js Fullscreen */
 a-scene {
   position: fixed;
   inset: 0;
@@ -111,13 +112,16 @@ a-scene {
     top: 10px;
     left: 10px;
     right: 10px;
+    flex-wrap: wrap;
   }
 
   #status {
+    flex-basis: 100%;
     font-size: 12px;
   }
 
-  #permissionButton {
+  #permissionButton,
+  #locateButton {
     font-size: 12px;
     padding: 9px 10px;
   }
