@@ -2,28 +2,23 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
   />
-
   <meta name="theme-color" content="#000000" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
   <title>POI AR App</title>
 
-  <!-- A-Frame: stabile Variante für unsere AR.js-Location-App -->
+  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
 
-  <!-- AR.js: ältere Location-Based-Variante mit gps-camera / gps-entity-place -->
+  <!-- AR.js -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar.js"></script>
 
-  <!-- Damit Labels/Canvas-Bilder zur Kamera schauen können -->
+  <!-- Wird für look-at bei den Labels benötigt -->
   <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
 
-  <!-- Eigenes Styling -->
   <link rel="stylesheet" href="./styles.css" />
 </head>
 
@@ -55,13 +50,13 @@
   <a-scene
     embedded
     vr-mode-ui="enabled: false"
-    renderer="antialias: true; alpha: true; precision: mediump;"
+    renderer="antialias: true; alpha: true"
     arjs="sourceType: webcam; debugUIEnabled: false;"
   >
     <a-camera
       gps-camera
       rotation-reader
-      look-controls="touchEnabled: false; mouseEnabled: false"
+      look-controls="enabled: false"
       wasd-controls="enabled: false"
       cursor="rayOrigin: mouse"
       raycaster="objects: .clickable"
