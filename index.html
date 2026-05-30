@@ -2,12 +2,10 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
   />
-
   <meta name="theme-color" content="#000000" />
 
   <title>POI AR App</title>
@@ -22,133 +20,6 @@
   <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
 
   <link rel="stylesheet" href="./styles.css" />
-
-  <style>
-    :root {
-      --app-height: 100vh;
-    }
-
-    html,
-    body {
-      margin: 0 !important;
-      padding: 0 !important;
-      width: 100vw !important;
-      height: var(--app-height) !important;
-      min-height: var(--app-height) !important;
-      overflow: hidden !important;
-      background: #000 !important;
-      position: fixed !important;
-      inset: 0 !important;
-      touch-action: none;
-      overscroll-behavior: none;
-    }
-
-    #sceneContainer {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: var(--app-height) !important;
-      overflow: hidden !important;
-      z-index: 0 !important;
-      background: #000 !important;
-    }
-
-    /*
-      Android:
-      AR.js erzeugt ohne videoTexture ein echtes video-Element.
-      Das Video muss fullscreen im Hintergrund liegen.
-    */
-    video,
-    video.arjs-video {
-      position: fixed !important;
-      top: 50% !important;
-      left: 50% !important;
-      width: 100vw !important;
-      height: var(--app-height) !important;
-      min-width: 100vw !important;
-      min-height: var(--app-height) !important;
-      object-fit: cover !important;
-      transform: translate(-50%, -50%) !important;
-
-      /* Kamera hinter AR-Canvas */
-      z-index: 0 !important;
-
-      opacity: 1 !important;
-      visibility: visible !important;
-      display: block !important;
-      background: #000 !important;
-      pointer-events: none !important;
-    }
-
-    /*
-      A-Frame-Szene über dem Kamerabild.
-    */
-    a-scene {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: var(--app-height) !important;
-      overflow: hidden !important;
-      z-index: 2 !important;
-      pointer-events: auto !important;
-    }
-
-    /*
-      Canvas mit AR-Punkten über dem Kamera-Video.
-      Wichtig: background transparent lassen.
-    */
-    canvas,
-    canvas.a-canvas {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: var(--app-height) !important;
-      z-index: 2 !important;
-      background: transparent !important;
-      pointer-events: auto !important;
-    }
-
-    /*
-      UI immer sichtbar über Kamera und AR.
-    */
-    #topbar {
-      position: fixed !important;
-      top: 10px !important;
-      left: 10px !important;
-      right: 10px !important;
-      z-index: 50 !important;
-      display: flex !important;
-      flex-wrap: wrap !important;
-      gap: 8px !important;
-      align-items: stretch !important;
-      pointer-events: none !important;
-      max-width: calc(100vw - 20px) !important;
-      box-sizing: border-box !important;
-    }
-
-    #status {
-      flex: 1 1 100% !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-    }
-
-    #permissionButton,
-    #locateButton {
-      pointer-events: auto !important;
-      max-width: calc(100vw - 20px) !important;
-      box-sizing: border-box !important;
-    }
-
-    #poiPanel {
-      position: fixed !important;
-      left: 10px !important;
-      right: 10px !important;
-      bottom: 10px !important;
-      z-index: 50 !important;
-      max-width: calc(100vw - 20px) !important;
-      box-sizing: border-box !important;
-    }
-  </style>
 </head>
 
 <body>
@@ -176,73 +47,21 @@
     </button>
   </section>
 
-  <div id="sceneContainer"></div>
-
-  <script>
-    /*
-      Android Chrome behandelt 100vh oft falsch,
-      weil die Adressleiste mitgerechnet wird.
-      Deshalb setzen wir die echte sichtbare Höhe per JS.
-    */
-    function setAppHeight() {
-      const height = window.innerHeight;
-      document.documentElement.style.setProperty("--app-height", `${height}px`);
-    }
-
-    setAppHeight();
-
-    window.addEventListener("resize", setAppHeight);
-    window.addEventListener("orientationchange", () => {
-      setTimeout(setAppHeight, 300);
-    });
-
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-    const isAndroid = /android/i.test(userAgent);
-
-    const isIOS =
-      /iPad|iPhone|iPod/.test(userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-    /*
-      iPhone/iOS:
-      Deine funktionierende Variante mit videoTexture.
-
-      Android:
-      Ohne videoTexture, damit ein echtes video-Element entsteht.
-      Dieses wird per CSS hinter den Canvas gelegt.
-    */
-    const arjsSettings = isAndroid
-      ? "sourceType: webcam; debugUIEnabled: false;"
-      : "sourceType: webcam; videoTexture: true; debugUIEnabled: false;";
-
-    const sceneContainer = document.querySelector("#sceneContainer");
-
-    sceneContainer.innerHTML = `
-      <a-scene
-        embedded
-        vr-mode-ui="enabled: false"
-        renderer="antialias: true; alpha: true"
-        arjs="${arjsSettings}"
-      >
-        <a-camera
-          gps-camera
-          rotation-reader
-          look-controls="touchEnabled: false; mouseEnabled: false"
-          wasd-controls="enabled: false"
-          cursor="rayOrigin: mouse"
-          raycaster="objects: .clickable"
-        ></a-camera>
-      </a-scene>
-    `;
-
-    console.log("Gerät erkannt:", {
-      isAndroid,
-      isIOS,
-      arjsSettings,
-      appHeight: window.innerHeight
-    });
-  </script>
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="antialias: true; alpha: true"
+    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+  >
+    <a-camera
+      gps-camera
+      rotation-reader
+      look-controls="touchEnabled: false; mouseEnabled: false"
+      wasd-controls="enabled: false"
+      cursor="rayOrigin: mouse"
+      raycaster="objects: .clickable"
+    ></a-camera>
+  </a-scene>
 
   <script src="./app.js"></script>
 </body>
