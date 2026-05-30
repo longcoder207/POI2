@@ -325,39 +325,36 @@ function createPoiEntity(poi) {
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
-  /*
-    Wichtig:
-    Kein großes wrapper-scale.
-    Der Text wird sonst schnell außerhalb des sichtbaren Bereichs verschoben.
-  */
-
-  // Das eigentliche POI-Element
+  // Gelber POI-Punkt
   const marker = document.createElement("a-sphere");
   marker.setAttribute("radius", "1.5");
   marker.setAttribute("color", "#ffcc00");
   marker.setAttribute("position", "0 0 0");
 
-  // Text-Gruppe direkt über dem Punkt
+  // Gruppe für Text + Hintergrund
   const labelGroup = document.createElement("a-entity");
-  labelGroup.setAttribute("position", "0 3 0");
+  labelGroup.setAttribute("position", "0 4 0");
+
+  // Wichtig: Text-Gruppe schaut immer zur Kamera
+  labelGroup.setAttribute("look-at", "[gps-camera]");
 
   // Hintergrund hinter dem Namen
   const labelBackground = document.createElement("a-plane");
-  labelBackground.setAttribute("width", "8");
-  labelBackground.setAttribute("height", "2");
+  labelBackground.setAttribute("width", "10");
+  labelBackground.setAttribute("height", "2.5");
   labelBackground.setAttribute("color", "#000000");
-  labelBackground.setAttribute("opacity", "0.75");
+  labelBackground.setAttribute("opacity", "0.8");
   labelBackground.setAttribute("side", "double");
   labelBackground.setAttribute("position", "0 0 -0.05");
 
-  // Nur der Name aus pois.json über dem POI-Element
+  // Name aus pois.json
   const label = document.createElement("a-text");
   label.setAttribute("value", poi.name || "POI");
   label.setAttribute("align", "center");
   label.setAttribute("anchor", "center");
   label.setAttribute("baseline", "center");
   label.setAttribute("color", "#ffffff");
-  label.setAttribute("width", "12");
+  label.setAttribute("width", "14");
   label.setAttribute("side", "double");
   label.setAttribute("position", "0 0 0.05");
 
@@ -434,16 +431,16 @@ function bearingToPoi(lat1, lon1, lat2, lon2) {
   const toRad = (value) => (value * Math.PI) / 180;
   const toDeg = (value) => (value * 180) / Math.PI;
 
-  const φ1 = toRad(lat1);
-  const φ2 = toRad(lat2);
-  const Δλ = toRad(lon2 - lon1);
+  const lat1Rad = toRad(lat1);
+  const lat2Rad = toRad(lat2);
+  const deltaLonRad = toRad(lon2 - lon1);
 
-  const y = Math.sin(Δλ) * Math.cos(φ2);
+  const y = Math.sin(deltaLonRad) * Math.cos(lat2Rad);
   const x =
-    Math.cos(φ1) * Math.sin(φ2) -
-    Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+    Math.cos(lat1Rad) * Math.sin(lat2Rad) -
+    Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(deltaLonRad);
 
-  const θ = Math.atan2(y, x);
+  const bearingRad = Math.atan2(y, x);
 
-  return (toDeg(θ) + 360) % 360;
+  return (toDeg(bearingRad) + 360) % 360;
 }
