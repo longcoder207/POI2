@@ -3,15 +3,11 @@
 // ------------------------------------------------------------
 
 // POIs werden nur angezeigt, wenn sie innerhalb dieses Radius liegen.
+// Für Tests kannst du den Wert z. B. auf 100000 setzen.
 const MAX_DISTANCE_METERS = 5000;
 
-// AR-Labels werden einmalig gerendert, sobald GPS verfügbar ist.
 let poisRendered = false;
-
-// Aktueller Nutzerstandort
 let userPosition = null;
-
-// Geladene POIs aus pois.json
 let pois = [];
 
 // DOM-Elemente
@@ -197,40 +193,41 @@ function renderNearbyPois() {
 function createPoiEntity(poi) {
   const wrapper = document.createElement("a-entity");
 
-  wrapper.setAttribute("gps-entity-place", {
+  wrapper.setAttribute("gps-new-entity-place", {
     latitude: poi.latitude,
     longitude: poi.longitude
   });
 
-  wrapper.setAttribute("look-at", "[gps-camera]");
+  wrapper.setAttribute("look-at", "[gps-new-camera]");
   wrapper.setAttribute("scale", "18 18 18");
   wrapper.setAttribute("data-poi-id", poi.id);
+  wrapper.classList.add("clickable");
 
-  // Schwarzer Hintergrund hinter dem Text
-  const background = document.createElement("a-plane");
-  background.setAttribute("width", "5.2");
-  background.setAttribute("height", "1.8");
-  background.setAttribute("color", "#111111");
-  background.setAttribute("opacity", "0.78");
-  background.setAttribute("position", "0 1.6 0");
-
-  // Textlabel
-  const label = document.createElement("a-text");
-  label.setAttribute("value", `${poi.name}\n${poi.distance} m`);
-  label.setAttribute("align", "center");
-  label.setAttribute("color", "#ffffff");
-  label.setAttribute("width", "6");
-  label.setAttribute("position", "0 1.6 0.05");
-
-  // Gelber Markerpunkt
+  // Das eigentliche POI-Element
   const marker = document.createElement("a-sphere");
   marker.setAttribute("radius", "0.35");
   marker.setAttribute("color", "#ffcc00");
   marker.setAttribute("position", "0 0.35 0");
 
-  wrapper.appendChild(background);
-  wrapper.appendChild(label);
+  // Hintergrund hinter dem Namen
+  const labelBackground = document.createElement("a-plane");
+  labelBackground.setAttribute("width", "3.8");
+  labelBackground.setAttribute("height", "0.7");
+  labelBackground.setAttribute("color", "#000000");
+  labelBackground.setAttribute("opacity", "0.65");
+  labelBackground.setAttribute("position", "0 1.2 -0.02");
+
+  // Name über dem POI-Element
+  const label = document.createElement("a-text");
+  label.setAttribute("value", poi.name);
+  label.setAttribute("align", "center");
+  label.setAttribute("color", "#ffffff");
+  label.setAttribute("width", "6");
+  label.setAttribute("position", "0 1.2 0");
+
   wrapper.appendChild(marker);
+  wrapper.appendChild(labelBackground);
+  wrapper.appendChild(label);
 
   wrapper.addEventListener("click", () => {
     showPoiPanel(poi);
@@ -252,7 +249,8 @@ function setupPoiPanel() {
 
 function showPoiPanel(poi) {
   poiTitle.textContent = poi.name;
-  poiDescription.textContent = poi.description || "Keine Beschreibung hinterlegt.";
+  poiDescription.textContent =
+    poi.description || "Keine Beschreibung hinterlegt.";
   poiDistance.textContent = `Entfernung: ca. ${poi.distance} m`;
 
   poiPanel.style.display = "block";
