@@ -4,16 +4,18 @@
 
 // POIs werden nur angezeigt, wenn sie innerhalb dieses Radius liegen.
 // Für Tests kannst du den Wert z. B. auf 100000 setzen.
-const MAX_DISTANCE_METERS = 5000;
+const MAX_DISTANCE_METERS = 1500;
 
-let poisRendered = false;
 let userPosition = null;
+let lastGpsPosition = null;
 let pois = [];
+let isLocateRequested = false;
 
 // DOM-Elemente
 const scene = document.querySelector("a-scene");
 const statusEl = document.querySelector("#status");
 const permissionButton = document.querySelector("#permissionButton");
+const locateButton = document.querySelector("#locateButton");
 
 const poiPanel = document.querySelector("#poiPanel");
 const poiTitle = document.querySelector("#poiTitle");
@@ -33,10 +35,11 @@ async function initApp() {
 
   setupMotionPermissionButton();
   setupPoiPanel();
+  setupLocateButton();
 
   try {
     pois = await loadPois();
-    setStatus("POIs geladen. Warte auf Standortfreigabe...");
+    setStatus("POIs geladen. Tippe auf „Standort bestimmen“.");
   } catch (error) {
     console.error(error);
     setStatus("POIs konnten nicht geladen werden. Prüfe die Datei pois.json.");
@@ -66,6 +69,55 @@ async function loadPois() {
 
 
 // ------------------------------------------------------------
+// Button: Standort manuell bestimmen
+// ------------------------------------------------------------
+
+function setupLocateButton() {
+  locateButton.addEventListener("click", () => {
+    isLocateRequested = true;
+
+    setStatus("Bestimme Standort...");
+
+    // Falls AR.js bereits einen Standort geliefert hat,
+    // nutzen wir diesen sofort.
+    if (lastGpsPosition) {
+      usePosition(lastGpsPosition);
+      return;
+    }
+
+    // Fallback: Browser-Geolocation aktiv anfragen.
+    if (!navigator.geolocation) {
+      setStatus("Geolocation wird von diesem Browser nicht unterstützt.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const manualPosition = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        };
+
+        usePosition(manualPosition);
+      },
+      (error) => {
+        console.error(error);
+        setStatus(
+          "Standort konnte nicht bestimmt werden. Bitte Standortfreigabe prüfen."
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
+  });
+}
+
+
+// ------------------------------------------------------------
 // iOS: Bewegungssensoren erlauben
 // ------------------------------------------------------------
 
@@ -86,7 +138,7 @@ function setupMotionPermissionButton() {
 
       if (response === "granted") {
         permissionButton.style.display = "none";
-        setStatus("Bewegungssensoren erlaubt. Warte auf Standort...");
+        setStatus("Bewegungssensoren erlaubt. Tippe auf „Standort bestimmen“.");
       } else {
         setStatus(
           "Bewegungssensoren wurden nicht erlaubt. Die Richtung der POIs kann ungenau sein."
@@ -107,20 +159,22 @@ function setupMotionPermissionButton() {
 window.addEventListener("gps-camera-update-position", (event) => {
   const latitude = event.detail.position.latitude;
   const longitude = event.detail.position.longitude;
+  const accuracy = event.detail.position.accuracy;
 
-  userPosition = {
+  lastGpsPosition = {
     latitude,
-    longitude
+    longitude,
+    accuracy
   };
 
-  setStatus(
-    `Standort gefunden: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}<br>` +
-    `Suche POIs im Umkreis von ${MAX_DISTANCE_METERS} m...`
-  );
-
-  if (!poisRendered) {
-    renderNearbyPois();
+  // Wichtig:
+  // Es wird NICHT automatisch neu gerendert.
+  // Die App reagiert nur, wenn der Button gedrückt wurde.
+  if (!isLocateRequested) {
+    return;
   }
+
+  usePosition(lastGpsPosition);
 });
 
 window.addEventListener("gps-camera-error", (event) => {
@@ -133,12 +187,55 @@ window.addEventListener("gps-camera-error", (event) => {
 
 
 // ------------------------------------------------------------
+// Standort verwenden
+// ------------------------------------------------------------
+
+function usePosition(position) {
+  isLocateRequested = false;
+
+  userPosition = {
+    latitude: position.latitude,
+    longitude: position.longitude,
+    accuracy: position.accuracy
+  };
+
+  clearPoiEntities();
+  hidePoiPanel();
+
+  const accuracyText = userPosition.accuracy
+    ? `<br>Genauigkeit: ca. ${Math.round(userPosition.accuracy)} m`
+    : "";
+
+  setStatus(
+    `Standort bestimmt: ${userPosition.latitude.toFixed(5)}, ${userPosition.longitude.toFixed(5)}` +
+    accuracyText +
+    `<br>Suche POIs im Umkreis von ${MAX_DISTANCE_METERS} m...`
+  );
+
+  renderNearbyPois();
+}
+
+
+// ------------------------------------------------------------
+// Alte POIs entfernen
+// ------------------------------------------------------------
+
+function clearPoiEntities() {
+  const oldPois = document.querySelectorAll(".poi-entity");
+
+  oldPois.forEach((entity) => {
+    entity.remove();
+  });
+}
+
+
+// ------------------------------------------------------------
 // POIs filtern und anzeigen
 // ------------------------------------------------------------
 
 function renderNearbyPois() {
   if (!userPosition) {
-    setStatus("Noch kein Standort verfügbar.");
+    setStatus("Noch kein Standort verfügbar. Tippe auf „Standort bestimmen“.");
     return;
   }
 
@@ -166,10 +263,8 @@ function renderNearbyPois() {
 
   if (nearbyPois.length === 0) {
     setStatus(
-      `Standort gefunden, aber keine POIs im Umkreis von ${MAX_DISTANCE_METERS} m.`
+      `Standort bestimmt, aber keine POIs im Umkreis von ${MAX_DISTANCE_METERS} m gefunden.`
     );
-
-    poisRendered = true;
     return;
   }
 
@@ -178,10 +273,8 @@ function renderNearbyPois() {
     scene.appendChild(entity);
   });
 
-  poisRendered = true;
-
   setStatus(
-    `${nearbyPois.length} POI(s) gefunden. Tippe auf ein Label für Details.`
+    `${nearbyPois.length} POI(s) gefunden. Tippe erneut auf „Standort bestimmen“, um zu aktualisieren.`
   );
 }
 
@@ -201,6 +294,8 @@ function createPoiEntity(poi) {
   wrapper.setAttribute("look-at", "[gps-new-camera]");
   wrapper.setAttribute("scale", "18 18 18");
   wrapper.setAttribute("data-poi-id", poi.id);
+
+  wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
   // Das eigentliche POI-Element
@@ -217,7 +312,7 @@ function createPoiEntity(poi) {
   labelBackground.setAttribute("opacity", "0.65");
   labelBackground.setAttribute("position", "0 1.2 -0.02");
 
-  // Name über dem POI-Element
+  // Nur der Name aus pois.json über dem POI-Element
   const label = document.createElement("a-text");
   label.setAttribute("value", poi.name);
   label.setAttribute("align", "center");
