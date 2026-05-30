@@ -76,44 +76,16 @@ function setupLocateButton() {
   locateButton.addEventListener("click", () => {
     isLocateRequested = true;
 
-    setStatus("Bestimme Standort...");
+    clearPoiEntities();
+    hidePoiPanel();
 
-    // Falls AR.js bereits einen Standort geliefert hat,
-    // nutzen wir diesen sofort.
-    if (lastGpsPosition) {
-      usePosition(lastGpsPosition);
-      return;
-    }
-
-    // Fallback: Browser-Geolocation aktiv anfragen.
-    if (!navigator.geolocation) {
-      setStatus("Geolocation wird von diesem Browser nicht unterstützt.");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const manualPosition = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy
-        };
-
-        usePosition(manualPosition);
-      },
-      (error) => {
-        console.error(error);
-
-        setStatus(
-          "Standort konnte nicht bestimmt werden. Bitte Standortfreigabe prüfen."
-        );
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0
-      }
+    setStatus(
+      "Bestimme neuen Standort... Bitte das Handy kurz ruhig halten und in die Umgebung zeigen."
     );
+
+    // Wichtig:
+    // Wir verwenden hier NICHT lastGpsPosition sofort wieder.
+    // Wir warten bewusst auf das nächste gps-camera-update-position Event von AR.js.
   });
 }
 
@@ -169,8 +141,7 @@ window.addEventListener("gps-camera-update-position", (event) => {
   };
 
   // Wichtig:
-  // Die App rendert NICHT automatisch bei jedem GPS-Update.
-  // Der Standort wird nur genutzt, wenn der Button gedrückt wurde.
+  // Der Standort wird nur verwendet, wenn der Button gedrückt wurde.
   if (!isLocateRequested) {
     return;
   }
