@@ -6,6 +6,12 @@
 // Für Tests kannst du den Wert z. B. auf 100000 setzen.
 const MAX_DISTANCE_METERS = 1500;
 
+// Darstellungsgrößen für POIs
+// Diese Werte machen Kugel und Text deutlich größer.
+const POI_MIN_SCALE = 30;
+const POI_MAX_SCALE = 90;
+const POI_SCALE_DISTANCE_FACTOR = 0.1;
+
 let userPosition = null;
 let lastGpsPosition = null;
 let pois = [];
@@ -325,27 +331,31 @@ function createPoiEntity(poi) {
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
+  // Responsive Größe abhängig von der Entfernung
+  const poiScale = getPoiScale(poi.distance || 0);
+  wrapper.setAttribute("scale", `${poiScale} ${poiScale} ${poiScale}`);
+
   // Gelber POI-Punkt
   const marker = document.createElement("a-sphere");
-  marker.setAttribute("radius", "1.5");
+  marker.setAttribute("radius", "0.28");
   marker.setAttribute("color", "#ffcc00");
   marker.setAttribute("position", "0 0 0");
 
   // Gruppe für Text + Hintergrund
   const labelGroup = document.createElement("a-entity");
-  labelGroup.setAttribute("position", "0 4 0");
+  labelGroup.setAttribute("position", "0 0.75 0");
 
-  // Wichtig: Text-Gruppe schaut immer zur Kamera
+  // Text-Gruppe schaut immer zur Kamera
   labelGroup.setAttribute("look-at", "[gps-camera]");
 
   // Hintergrund hinter dem Namen
   const labelBackground = document.createElement("a-plane");
-  labelBackground.setAttribute("width", "10");
-  labelBackground.setAttribute("height", "2.5");
+  labelBackground.setAttribute("width", "2.8");
+  labelBackground.setAttribute("height", "0.7");
   labelBackground.setAttribute("color", "#000000");
   labelBackground.setAttribute("opacity", "0.8");
   labelBackground.setAttribute("side", "double");
-  labelBackground.setAttribute("position", "0 0 -0.05");
+  labelBackground.setAttribute("position", "0 0 -0.02");
 
   // Name aus pois.json
   const label = document.createElement("a-text");
@@ -354,9 +364,9 @@ function createPoiEntity(poi) {
   label.setAttribute("anchor", "center");
   label.setAttribute("baseline", "center");
   label.setAttribute("color", "#ffffff");
-  label.setAttribute("width", "14");
+  label.setAttribute("width", "3.2");
   label.setAttribute("side", "double");
-  label.setAttribute("position", "0 0 0.05");
+  label.setAttribute("position", "0 0 0.03");
 
   labelGroup.appendChild(labelBackground);
   labelGroup.appendChild(label);
@@ -368,7 +378,11 @@ function createPoiEntity(poi) {
     showPoiPanel(poi);
   });
 
-  console.log("POI mit Label erstellt:", poi.name);
+  console.log("POI mit Label erstellt:", {
+    name: poi.name,
+    distance: poi.distance,
+    scale: poiScale
+  });
 
   return wrapper;
 }
@@ -406,6 +420,15 @@ function hidePoiPanel() {
 
 function setStatus(message) {
   statusEl.innerHTML = message;
+}
+
+function getPoiScale(distance) {
+  const scale = POI_MIN_SCALE + distance * POI_SCALE_DISTANCE_FACTOR;
+
+  return Math.min(
+    POI_MAX_SCALE,
+    Math.max(POI_MIN_SCALE, scale)
+  );
 }
 
 function distanceInMeters(lat1, lon1, lat2, lon2) {
