@@ -10,20 +10,183 @@
   },
   {
     "id": "002",
-    "name": "Test POI 2",
-    "latitude": 52.5194,
-    "longitude": 13.4067,
+    "name": "Pestalozzi",
+    "latitude": 51.128482,
+    "longitude": 7.612168,
     "category": "test",
     "description": "Dies ist ein zweiter Beispielpunkt mit eigener Beschreibung.",
     "icon": "default"
   },
   {
     "id": "003",
-    "name": "Test POI 3",
-    "latitude": 52.5222,
+    "name": "Kierspe - ZOB",
+    "latitude": 51.129829,
     "longitude": 13.4131,
     "category": "test",
     "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
     "icon": "default"
   }
+   {
+    "id": "004",
+    "name": "Vorderste Berg",
+    "latitude": 51.134668,
+    "longitude": 7.624110,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "005",
+    "name": "Gesamtschule",
+    "latitude": 51.128788,
+    "longitude": 7.592680,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "006",
+    "name": "Füchelstöcke",
+    "latitude": 51.127966,
+    "longitude": 7.584887,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "007",
+    "name": "PJ",
+    "latitude": 51.124815,
+    "longitude": 7.585762,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "008",
+    "name": "Saufi-Kirche",
+    "latitude": 51.078801,
+    "longitude": 7.802477,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "009",
+    "name": "Börlinghausen",
+    "latitude": 51.077747,
+    "longitude": 7.774393,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "010",
+    "name": "Lister",
+    "latitude": 51.076394,
+    "longitude": 7.799381,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "011",
+    "name": "Hotel Bauer",
+    "latitude": 51.106825,
+    "longitude": 7.678017,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "012",
+    "name": "OBI",
+    "latitude": 51.101189,
+    "longitude": 7.678699,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "013",
+    "name": "Penny",
+    "latitude": 51.106042,
+    "longitude": 7.660348,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "014",
+    "name": "Robin 1",
+    "latitude": 51.089681,
+    "longitude": 7.598088,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "015",
+    "name": "Robin 2",
+    "latitude": 51.092098,
+    "longitude": 7.589819,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "016",
+    "name": "Robin 3",
+    "latitude": 51.093266,
+    "longitude": 7.600782,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "017",
+    "name": "Christian 1",
+    "latitude": 51.129829,
+    "longitude": 13.4131,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "018",
+    "name": "Christian 2",
+    "latitude": 51.129829,
+    "longitude": 13.4131,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "019",
+    "name": "Christian 3",
+    "latitude": 51.129829,
+    "longitude": 13.4131,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  {
+    "id": "020",
+    "name": "Caffe Sirringhaus",
+    "latitude": 51.178749,
+    "longitude": 7.742933,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+   {
+    "id": "021",
+    "name": "Friedhof",
+    "latitude": 51.180428,
+    "longitude": 7.74928,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  }
+  
 ]
