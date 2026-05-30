@@ -143,34 +143,34 @@
     "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
     "icon": "default"
   },
-  {
-    "id": "017",
-    "name": "Christian 1",
-    "latitude": 51.129829,
-    "longitude": 13.4131,
-    "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
-    "icon": "default"
-  },
-  {
-    "id": "018",
-    "name": "Christian 2",
-    "latitude": 51.129829,
-    "longitude": 13.4131,
-    "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
-    "icon": "default"
-  },
-  {
-    "id": "019",
-    "name": "Christian 3",
-    "latitude": 51.129829,
-    "longitude": 13.4131,
-    "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
-    "icon": "default"
-  },
-  {
+ {
+  "id": "017",
+  "name": "Christian 1",
+  "latitude": 51.444931,
+  "longitude": 7.227756,
+  "category": "test",
+  "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+  "icon": "default"
+},
+{
+  "id": "018",
+  "name": "Christian 2",
+  "latitude": 51.443971,
+  "longitude": 7.231115,
+  "category": "test",
+  "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+  "icon": "default"
+},
+{
+  "id": "019",
+  "name": "Christian 3",
+  "latitude": 51.446706,
+  "longitude": 7.231944,
+  "category": "test",
+  "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+  "icon": "default"
+}
+{
     "id": "020",
     "name": "Caffe Sirringhaus",
     "latitude": 51.178749,
