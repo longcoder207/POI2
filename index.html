@@ -2,10 +2,12 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
+
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
   />
+
   <meta name="theme-color" content="#000000" />
 
   <title>POI AR App</title>
@@ -22,51 +24,116 @@
   <link rel="stylesheet" href="./styles.css" />
 
   <style>
-    /*
-      Wichtig für Android:
-      AR.js erzeugt ein Video-Element für die Kamera.
-      Auf manchen Android-Geräten läuft die Kamera, aber das Video liegt unsichtbar hinter/unter dem Canvas.
-      Diese Regeln zwingen das Kameravideo fullscreen in den Hintergrund.
-    */
+    :root {
+      --app-height: 100vh;
+    }
 
     html,
     body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: transparent;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100vw !important;
+      height: var(--app-height) !important;
+      min-height: var(--app-height) !important;
+      overflow: hidden !important;
+      background: #000 !important;
+      position: fixed !important;
+      inset: 0 !important;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
-    video {
+    #sceneContainer {
       position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
+      inset: 0 !important;
       width: 100vw !important;
-      height: 100vh !important;
+      height: var(--app-height) !important;
+      overflow: hidden !important;
+      z-index: 0 !important;
+      background: #000 !important;
+    }
+
+    /*
+      Android-Fix:
+      AR.js erzeugt ein video-Element.
+      Dieses muss exakt fullscreen hinter der AR-Szene liegen.
+    */
+    video,
+    video.arjs-video {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: 100vw !important;
+      height: var(--app-height) !important;
+      min-width: 100vw !important;
+      min-height: var(--app-height) !important;
       object-fit: cover !important;
+      transform: translate(-50%, -50%) !important;
       z-index: 0 !important;
       opacity: 1 !important;
       visibility: visible !important;
       display: block !important;
-      transform: none !important;
+      background: #000 !important;
     }
 
     a-scene {
       position: fixed !important;
       inset: 0 !important;
       width: 100vw !important;
-      height: 100vh !important;
+      height: var(--app-height) !important;
+      overflow: hidden !important;
       z-index: 1 !important;
     }
 
+    canvas,
     canvas.a-canvas {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: var(--app-height) !important;
       background: transparent !important;
+      z-index: 1 !important;
     }
 
-    #topbar,
+    /*
+      UI immer im sichtbaren Bereich halten.
+    */
+    #topbar {
+      position: fixed !important;
+      top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+      left: 10px !important;
+      right: 10px !important;
+      z-index: 50 !important;
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      align-items: stretch !important;
+      pointer-events: none !important;
+      max-width: calc(100vw - 20px) !important;
+      box-sizing: border-box !important;
+    }
+
+    #status {
+      flex: 1 1 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    #permissionButton,
+    #locateButton {
+      pointer-events: auto !important;
+      max-width: calc(100vw - 20px) !important;
+      box-sizing: border-box !important;
+    }
+
     #poiPanel {
-      z-index: 20 !important;
+      position: fixed !important;
+      left: 10px !important;
+      right: 10px !important;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 10px) !important;
+      z-index: 50 !important;
+      max-width: calc(100vw - 20px) !important;
+      box-sizing: border-box !important;
     }
   </style>
 </head>
@@ -99,8 +166,24 @@
   <div id="sceneContainer"></div>
 
   <script>
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    /*
+      Android Chrome hat manchmal Probleme mit 100vh,
+      weil die Browser-Adressleiste mitgerechnet wird.
+      Deshalb setzen wir die echte sichtbare Höhe per JS.
+    */
+    function setAppHeight() {
+      const height = window.innerHeight;
+      document.documentElement.style.setProperty("--app-height", `${height}px`);
+    }
 
+    setAppHeight();
+
+    window.addEventListener("resize", setAppHeight);
+    window.addEventListener("orientationchange", () => {
+      setTimeout(setAppHeight, 300);
+    });
+
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const isAndroid = /android/i.test(userAgent);
 
     const isIOS =
@@ -112,8 +195,7 @@
       Deine funktionierende Variante mit videoTexture.
 
       Android:
-      Ohne videoTexture, damit AR.js ein echtes video-Element hinter die Szene legt.
-      Zusätzlich erzwingen wir per CSS, dass dieses Video sichtbar ist.
+      Ohne videoTexture, damit das echte video-Element angezeigt wird.
     */
     const arjsSettings = isAndroid
       ? "sourceType: webcam; debugUIEnabled: false;"
@@ -142,7 +224,8 @@
     console.log("Gerät erkannt:", {
       isAndroid,
       isIOS,
-      arjsSettings
+      arjsSettings,
+      appHeight: window.innerHeight
     });
   </script>
 
