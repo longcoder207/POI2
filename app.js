@@ -8,9 +8,9 @@ const MAX_DISTANCE_METERS = 1500;
 
 // Darstellungsgrößen für POIs
 // Diese Werte machen Kugel und Text deutlich größer.
-const POI_MIN_SCALE = 30;
-const POI_MAX_SCALE = 90;
-const POI_SCALE_DISTANCE_FACTOR = 0.1;
+const POI_MIN_SCALE = 250;
+const POI_MAX_SCALE = 400;
+const POI_SCALE_DISTANCE_FACTOR = 0.15;
 
 let userPosition = null;
 let lastGpsPosition = null;
