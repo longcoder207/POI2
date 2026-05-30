@@ -25,7 +25,6 @@
 </head>
 
 <body>
-  <!-- Obere Statusleiste -->
   <header id="topbar" aria-live="polite">
     <div id="status">
       Starte AR-App... Bitte Kamera- und Standortfreigabe erlauben.
@@ -40,7 +39,6 @@
     </button>
   </header>
 
-  <!-- Detailfenster für ausgewählten POI -->
   <section id="poiPanel" aria-hidden="true">
     <h2 id="poiTitle">POI</h2>
     <p id="poiDescription"></p>
@@ -51,22 +49,21 @@
     </button>
   </section>
 
-  <!-- AR-Szene -->
   <a-scene
     embedded
     vr-mode-ui="enabled: false"
     renderer="antialias: true; alpha: true"
     arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
   >
-    <!-- GPS-Kamera -->
     <a-camera
       gps-new-camera="gpsMinDistance: 5"
+      look-controls="touchEnabled: false; mouseEnabled: false; magicWindowTrackingEnabled: true"
+      wasd-controls="enabled: false"
       cursor="rayOrigin: mouse"
       raycaster="objects: .clickable"
     ></a-camera>
   </a-scene>
 
-  <!-- App-Logik -->
   <script src="./app.js"></script>
 </body>
 </html>
