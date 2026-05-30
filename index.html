@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#000000" />
+
+  <title>POI AR App</title>
+
+  <!--
+    Wichtig:
+    Diese App muss über HTTPS laufen, damit Kamera, GPS und Bewegungssensoren funktionieren.
+    Lokal am besten mit einem Dev-Server testen, nicht per file:// öffnen.
+  -->
+
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+
+  <!-- AR.js für A-Frame / Location Based AR -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar.js"></script>
+
+  <!-- Eigenes Styling -->
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <!-- Oberes Status-Overlay -->
+  <header id="topbar" aria-live="polite">
+    <div id="status">
+      Starte AR-App... Bitte Kamera- und Standortfreigabe erlauben.
+    </div>
+
+    <button id="permissionButton" type="button">
+      Sensoren erlauben
+    </button>
+  </header>
+
+  <!-- Detail-Panel für ausgewählten POI -->
+  <section id="poiPanel" aria-hidden="true">
+    <h2 id="poiTitle">POI</h2>
+    <p id="poiDescription"></p>
+    <p id="poiDistance"></p>
+
+    <button id="closePanel" type="button">
+      Schließen
+    </button>
+  </section>
+
+  <!-- AR-Szene -->
+  <a-scene
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="antialias: true; alpha: true"
+    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+  >
+    <!--
+      gps-camera liest den Standort des Nutzers.
+      rotation-reader liest die Geräteausrichtung.
+    -->
+    <a-camera gps-camera rotation-reader></a-camera>
+  </a-scene>
+
+  <!-- App-Logik -->
+  <script src="./app.js"></script>
+</body>
+</html>
