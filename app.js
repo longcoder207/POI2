@@ -6,14 +6,18 @@
 // Für Tests kannst du den Wert z. B. auf 100000 setzen.
 const MAX_DISTANCE_METERS = 1500;
 
-// Direkte Darstellungsgrößen.
-// Diese Werte bestimmen Kugel, Text und Texthintergrund.
+// Direkte Darstellungsgrößen
 const MARKER_RADIUS = 8;
 const LABEL_HEIGHT_ABOVE_MARKER = 24;
-const LABEL_BACKGROUND_WIDTH = 140;
-const LABEL_BACKGROUND_HEIGHT = 45;
-const LABEL_TEXT_WIDTH = 18;
-const LABEL_TEXT_SCALE = 7;
+
+// Größe des Canvas-Labels in der AR-Szene
+const LABEL_IMAGE_WIDTH = 140;
+const LABEL_IMAGE_HEIGHT = 44;
+
+// Größe des intern erzeugten Canvas-Bildes
+const LABEL_CANVAS_WIDTH = 1400;
+const LABEL_CANVAS_HEIGHT = 440;
+const LABEL_CANVAS_FONT_SIZE = 170;
 
 let userPosition = null;
 let lastGpsPosition = null;
@@ -328,43 +332,29 @@ function createPoiEntity(poi) {
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
-  // Keine Wrapper-Skalierung.
-  // Wir setzen die realen Objektgrößen direkt auf Kugel, Text und Hintergrund.
-
   // Gelber POI-Punkt
   const marker = document.createElement("a-sphere");
   marker.setAttribute("radius", String(MARKER_RADIUS));
   marker.setAttribute("color", "#ffcc00");
   marker.setAttribute("position", "0 0 0");
 
-  // Gruppe für Text + Hintergrund
+  // Gruppe für Canvas-Label
   const labelGroup = document.createElement("a-entity");
   labelGroup.setAttribute("position", `0 ${LABEL_HEIGHT_ABOVE_MARKER} 0`);
   labelGroup.setAttribute("look-at", "[gps-camera]");
 
-  // Hintergrund hinter dem Namen
-  const labelBackground = document.createElement("a-plane");
-  labelBackground.setAttribute("width", String(LABEL_BACKGROUND_WIDTH));
-  labelBackground.setAttribute("height", String(LABEL_BACKGROUND_HEIGHT));
-  labelBackground.setAttribute("color", "#000000");
-  labelBackground.setAttribute("opacity", "0.85");
-  labelBackground.setAttribute("side", "double");
-  labelBackground.setAttribute("position", "0 0 -0.2");
+  // Canvas-Text als Bild erzeugen
+  const labelImageUrl = createTextLabelImage(poi.name || "POI");
 
-  // Name aus pois.json
-  const label = document.createElement("a-text");
-  label.setAttribute("value", poi.name || "POI");
-  label.setAttribute("align", "center");
-  label.setAttribute("anchor", "center");
-  label.setAttribute("baseline", "center");
-  label.setAttribute("color", "#ffffff");
-  label.setAttribute("width", String(LABEL_TEXT_WIDTH));
-  label.setAttribute("side", "double");
-  label.setAttribute("scale", `${LABEL_TEXT_SCALE} ${LABEL_TEXT_SCALE} ${LABEL_TEXT_SCALE}`);
-  label.setAttribute("position", "0 0 0.2");
+  const labelImage = document.createElement("a-image");
+  labelImage.setAttribute("src", labelImageUrl);
+  labelImage.setAttribute("width", String(LABEL_IMAGE_WIDTH));
+  labelImage.setAttribute("height", String(LABEL_IMAGE_HEIGHT));
+  labelImage.setAttribute("side", "double");
+  labelImage.setAttribute("transparent", "true");
+  labelImage.setAttribute("position", "0 0 0");
 
-  labelGroup.appendChild(labelBackground);
-  labelGroup.appendChild(label);
+  labelGroup.appendChild(labelImage);
 
   wrapper.appendChild(marker);
   wrapper.appendChild(labelGroup);
@@ -373,15 +363,66 @@ function createPoiEntity(poi) {
     showPoiPanel(poi);
   });
 
-  console.log("POI erstellt:", {
+  console.log("POI mit Canvas-Label erstellt:", {
     name: poi.name,
-    distance: poi.distance,
-    markerRadius: MARKER_RADIUS,
-    labelTextWidth: LABEL_TEXT_WIDTH,
-    labelTextScale: LABEL_TEXT_SCALE
+    distance: poi.distance
   });
 
   return wrapper;
+}
+
+
+// ------------------------------------------------------------
+// Canvas-Label erzeugen
+// ------------------------------------------------------------
+
+function createTextLabelImage(text) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = LABEL_CANVAS_WIDTH;
+  canvas.height = LABEL_CANVAS_HEIGHT;
+
+  const radius = 60;
+
+  // Hintergrund
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.88)";
+  roundRect(ctx, 0, 0, canvas.width, canvas.height, radius);
+  ctx.fill();
+
+  // Text vorbereiten
+  const safeText = String(text || "POI");
+
+  ctx.fillStyle = "#ffffff";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = `bold ${LABEL_CANVAS_FONT_SIZE}px Arial, Helvetica, sans-serif`;
+
+  const maxTextWidth = canvas.width - 120;
+
+  ctx.fillText(
+    safeText,
+    canvas.width / 2,
+    canvas.height / 2,
+    maxTextWidth
+  );
+
+  return canvas.toDataURL("image/png");
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
 }
 
 
