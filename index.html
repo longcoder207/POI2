@@ -5,7 +5,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
   />
 
   <meta name="theme-color" content="#000000" />
@@ -54,9 +54,9 @@
     }
 
     /*
-      Android-Fix:
-      AR.js erzeugt ein video-Element.
-      Dieses muss exakt fullscreen hinter der AR-Szene liegen.
+      Android:
+      AR.js erzeugt ohne videoTexture ein echtes video-Element.
+      Das Video muss fullscreen im Hintergrund liegen.
     */
     video,
     video.arjs-video {
@@ -69,38 +69,51 @@
       min-height: var(--app-height) !important;
       object-fit: cover !important;
       transform: translate(-50%, -50%) !important;
+
+      /* Kamera hinter AR-Canvas */
       z-index: 0 !important;
+
       opacity: 1 !important;
       visibility: visible !important;
       display: block !important;
       background: #000 !important;
+      pointer-events: none !important;
     }
 
+    /*
+      A-Frame-Szene über dem Kamerabild.
+    */
     a-scene {
       position: fixed !important;
       inset: 0 !important;
       width: 100vw !important;
       height: var(--app-height) !important;
       overflow: hidden !important;
-      z-index: 1 !important;
+      z-index: 2 !important;
+      pointer-events: auto !important;
     }
 
+    /*
+      Canvas mit AR-Punkten über dem Kamera-Video.
+      Wichtig: background transparent lassen.
+    */
     canvas,
     canvas.a-canvas {
       position: fixed !important;
       inset: 0 !important;
       width: 100vw !important;
       height: var(--app-height) !important;
+      z-index: 2 !important;
       background: transparent !important;
-      z-index: 1 !important;
+      pointer-events: auto !important;
     }
 
     /*
-      UI immer im sichtbaren Bereich halten.
+      UI immer sichtbar über Kamera und AR.
     */
     #topbar {
       position: fixed !important;
-      top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+      top: 10px !important;
       left: 10px !important;
       right: 10px !important;
       z-index: 50 !important;
@@ -130,7 +143,7 @@
       position: fixed !important;
       left: 10px !important;
       right: 10px !important;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 10px) !important;
+      bottom: 10px !important;
       z-index: 50 !important;
       max-width: calc(100vw - 20px) !important;
       box-sizing: border-box !important;
@@ -167,8 +180,8 @@
 
   <script>
     /*
-      Android Chrome hat manchmal Probleme mit 100vh,
-      weil die Browser-Adressleiste mitgerechnet wird.
+      Android Chrome behandelt 100vh oft falsch,
+      weil die Adressleiste mitgerechnet wird.
       Deshalb setzen wir die echte sichtbare Höhe per JS.
     */
     function setAppHeight() {
@@ -184,6 +197,7 @@
     });
 
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
     const isAndroid = /android/i.test(userAgent);
 
     const isIOS =
@@ -191,11 +205,12 @@
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
     /*
-      iPhone:
+      iPhone/iOS:
       Deine funktionierende Variante mit videoTexture.
 
       Android:
-      Ohne videoTexture, damit das echte video-Element angezeigt wird.
+      Ohne videoTexture, damit ein echtes video-Element entsteht.
+      Dieses wird per CSS hinter den Canvas gelegt.
     */
     const arjsSettings = isAndroid
       ? "sourceType: webcam; debugUIEnabled: false;"
