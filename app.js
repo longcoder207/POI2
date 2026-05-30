@@ -320,42 +320,46 @@ function createPoiEntity(poi) {
     longitude: poi.longitude
   });
 
-  wrapper.setAttribute("look-at", "[gps-camera]");
-  wrapper.setAttribute("scale", "20 20 20");
   wrapper.setAttribute("data-poi-id", poi.id);
 
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
-  // POI-Punkt
+  /*
+    Wichtig:
+    Kein großes wrapper-scale.
+    Der Text wird sonst schnell außerhalb des sichtbaren Bereichs verschoben.
+  */
+
+  // Das eigentliche POI-Element
   const marker = document.createElement("a-sphere");
-  marker.setAttribute("radius", "0.35");
+  marker.setAttribute("radius", "1.5");
   marker.setAttribute("color", "#ffcc00");
   marker.setAttribute("position", "0 0 0");
 
-  // Text-Gruppe über dem Punkt
+  // Text-Gruppe direkt über dem Punkt
   const labelGroup = document.createElement("a-entity");
-  labelGroup.setAttribute("position", "0 1.1 0");
-  labelGroup.setAttribute("look-at", "[gps-camera]");
+  labelGroup.setAttribute("position", "0 3 0");
 
-  // Hintergrund hinter dem Text
+  // Hintergrund hinter dem Namen
   const labelBackground = document.createElement("a-plane");
-  labelBackground.setAttribute("width", "4.8");
-  labelBackground.setAttribute("height", "0.9");
+  labelBackground.setAttribute("width", "8");
+  labelBackground.setAttribute("height", "2");
   labelBackground.setAttribute("color", "#000000");
   labelBackground.setAttribute("opacity", "0.75");
-  labelBackground.setAttribute("position", "0 0 -0.03");
+  labelBackground.setAttribute("side", "double");
+  labelBackground.setAttribute("position", "0 0 -0.05");
 
-  // Nur der Name aus pois.json
+  // Nur der Name aus pois.json über dem POI-Element
   const label = document.createElement("a-text");
   label.setAttribute("value", poi.name || "POI");
   label.setAttribute("align", "center");
   label.setAttribute("anchor", "center");
   label.setAttribute("baseline", "center");
   label.setAttribute("color", "#ffffff");
-  label.setAttribute("width", "5.5");
+  label.setAttribute("width", "12");
   label.setAttribute("side", "double");
-  label.setAttribute("position", "0 0 0.03");
+  label.setAttribute("position", "0 0 0.05");
 
   labelGroup.appendChild(labelBackground);
   labelGroup.appendChild(label);
@@ -366,6 +370,8 @@ function createPoiEntity(poi) {
   wrapper.addEventListener("click", () => {
     showPoiPanel(poi);
   });
+
+  console.log("POI mit Label erstellt:", poi.name);
 
   return wrapper;
 }
