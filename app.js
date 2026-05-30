@@ -33,13 +33,20 @@ initApp();
 async function initApp() {
   setStatus("Lade POIs...");
 
-  setupMotionPermissionButton();
   setupPoiPanel();
   setupLocateButton();
 
   try {
     pois = await loadPois();
-    setStatus("POIs geladen. Tippe auf „Standort bestimmen“.");
+
+    const sensorPermissionNeeded = setupMotionPermissionButton();
+
+    if (sensorPermissionNeeded) {
+      setStatus("POIs geladen. Bitte zuerst „Sensoren erlauben“ tippen.");
+    } else {
+      showLocateButton();
+      setStatus("POIs geladen. Tippe auf „Standort bestimmen“.");
+    }
   } catch (error) {
     console.error(error);
     setStatus("POIs konnten nicht geladen werden. Prüfe die Datei pois.json.");
@@ -69,24 +76,22 @@ async function loadPois() {
 
 
 // ------------------------------------------------------------
-// Button: Standort manuell bestimmen
+// Button-Management
 // ------------------------------------------------------------
 
-function setupLocateButton() {
-  locateButton.addEventListener("click", () => {
-    isLocateRequested = true;
+function showPermissionButton() {
+  permissionButton.style.display = "block";
+  locateButton.style.display = "none";
+}
 
-    clearPoiEntities();
-    hidePoiPanel();
+function showLocateButton() {
+  permissionButton.style.display = "none";
+  locateButton.style.display = "block";
+}
 
-    setStatus(
-      "Bestimme neuen Standort... Bitte das Handy kurz ruhig halten und in die Umgebung zeigen."
-    );
-
-    // Wichtig:
-    // Wir verwenden hier NICHT lastGpsPosition sofort wieder.
-    // Wir warten bewusst auf das nächste gps-camera-update-position Event von AR.js.
-  });
+function hideActionButtons() {
+  permissionButton.style.display = "none";
+  locateButton.style.display = "none";
 }
 
 
@@ -100,27 +105,59 @@ function setupMotionPermissionButton() {
     typeof DeviceOrientationEvent.requestPermission === "function";
 
   if (!needsPermission) {
-    return;
+    permissionButton.style.display = "none";
+    return false;
   }
 
-  permissionButton.style.display = "block";
+  showPermissionButton();
 
   permissionButton.addEventListener("click", async () => {
     try {
+      setStatus("Frage Sensorfreigabe an...");
+
       const response = await DeviceOrientationEvent.requestPermission();
 
       if (response === "granted") {
-        permissionButton.style.display = "none";
-        setStatus("Bewegungssensoren erlaubt. Tippe auf „Standort bestimmen“.");
+        showLocateButton();
+        setStatus("Sensoren erlaubt. Tippe jetzt auf „Standort bestimmen“.");
       } else {
+        showLocateButton();
         setStatus(
-          "Bewegungssensoren wurden nicht erlaubt. Die Richtung der POIs kann ungenau sein."
+          "Sensoren wurden nicht erlaubt. Du kannst den Standort trotzdem bestimmen, aber die Richtung der POIs kann ungenau sein."
         );
       }
     } catch (error) {
       console.error(error);
-      setStatus("Sensorfreigabe konnte nicht angefragt werden.");
+
+      showLocateButton();
+      setStatus(
+        "Sensorfreigabe konnte nicht angefragt werden. Tippe trotzdem auf „Standort bestimmen“."
+      );
     }
+  });
+
+  return true;
+}
+
+
+// ------------------------------------------------------------
+// Button: Standort manuell bestimmen
+// ------------------------------------------------------------
+
+function setupLocateButton() {
+  locateButton.addEventListener("click", () => {
+    isLocateRequested = true;
+
+    clearPoiEntities();
+    hidePoiPanel();
+
+    setStatus("Bestimme Standort... Bitte Handy kurz ruhig halten.");
+
+    /*
+      Wichtig:
+      Wir benutzen nicht sofort den alten Standort.
+      Die App wartet auf das nächste gps-camera-update-position Event von AR.js.
+    */
   });
 }
 
@@ -140,8 +177,8 @@ window.addEventListener("gps-camera-update-position", (event) => {
     accuracy
   };
 
-  // Wichtig:
-  // Der Standort wird nur verwendet, wenn der Button gedrückt wurde.
+  console.log("AR.js GPS Update:", lastGpsPosition);
+
   if (!isLocateRequested) {
     return;
   }
@@ -150,7 +187,9 @@ window.addEventListener("gps-camera-update-position", (event) => {
 });
 
 window.addEventListener("gps-camera-error", (event) => {
-  console.error(event);
+  console.error("AR.js GPS Error:", event);
+
+  showLocateButton();
 
   setStatus(
     "Standort konnte nicht gelesen werden. Bitte GPS und Browser-Berechtigungen prüfen."
@@ -225,9 +264,27 @@ function renderNearbyPois() {
         poi.longitude
       );
 
+      const bearing = bearingToPoi(
+        userPosition.latitude,
+        userPosition.longitude,
+        poi.latitude,
+        poi.longitude
+      );
+
+      console.log(
+        `POI: ${poi.name}`,
+        {
+          distance: Math.round(distance),
+          bearing: Math.round(bearing),
+          latitude: poi.latitude,
+          longitude: poi.longitude
+        }
+      );
+
       return {
         ...poi,
-        distance: Math.round(distance)
+        distance: Math.round(distance),
+        bearing: Math.round(bearing)
       };
     })
     .filter((poi) => poi.distance <= MAX_DISTANCE_METERS)
@@ -258,12 +315,12 @@ function renderNearbyPois() {
 function createPoiEntity(poi) {
   const wrapper = document.createElement("a-entity");
 
-  wrapper.setAttribute("gps-new-entity-place", {
+  wrapper.setAttribute("gps-entity-place", {
     latitude: poi.latitude,
     longitude: poi.longitude
   });
 
-  wrapper.setAttribute("look-at", "[gps-new-camera]");
+  wrapper.setAttribute("look-at", "[gps-camera]");
   wrapper.setAttribute("scale", "18 18 18");
   wrapper.setAttribute("data-poi-id", poi.id);
 
@@ -355,4 +412,22 @@ function distanceInMeters(lat1, lon1, lat2, lon2) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   return earthRadius * c;
+}
+
+function bearingToPoi(lat1, lon1, lat2, lon2) {
+  const toRad = (value) => (value * Math.PI) / 180;
+  const toDeg = (value) => (value * 180) / Math.PI;
+
+  const φ1 = toRad(lat1);
+  const φ2 = toRad(lat2);
+  const Δλ = toRad(lon2 - lon1);
+
+  const y = Math.sin(Δλ) * Math.cos(φ2);
+  const x =
+    Math.cos(φ1) * Math.sin(φ2) -
+    Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+
+  const θ = Math.atan2(y, x);
+
+  return (toDeg(θ) + 360) % 360;
 }
