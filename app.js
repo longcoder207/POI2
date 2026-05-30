@@ -103,6 +103,7 @@ function setupLocateButton() {
       },
       (error) => {
         console.error(error);
+
         setStatus(
           "Standort konnte nicht bestimmt werden. Bitte Standortfreigabe prüfen."
         );
@@ -168,8 +169,8 @@ window.addEventListener("gps-camera-update-position", (event) => {
   };
 
   // Wichtig:
-  // Es wird NICHT automatisch neu gerendert.
-  // Die App reagiert nur, wenn der Button gedrückt wurde.
+  // Die App rendert NICHT automatisch bei jedem GPS-Update.
+  // Der Standort wird nur genutzt, wenn der Button gedrückt wurde.
   if (!isLocateRequested) {
     return;
   }
@@ -208,8 +209,8 @@ function usePosition(position) {
 
   setStatus(
     `Standort bestimmt: ${userPosition.latitude.toFixed(5)}, ${userPosition.longitude.toFixed(5)}` +
-    accuracyText +
-    `<br>Suche POIs im Umkreis von ${MAX_DISTANCE_METERS} m...`
+      accuracyText +
+      `<br>Suche POIs im Umkreis von ${MAX_DISTANCE_METERS} m...`
   );
 
   renderNearbyPois();
