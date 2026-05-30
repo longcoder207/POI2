@@ -4,7 +4,7 @@
 
 // POIs werden nur angezeigt, wenn sie innerhalb dieses Radius liegen.
 // Für Tests kannst du den Wert z. B. auf 100000 setzen.
-const MAX_DISTANCE_METERS = 1500;
+const MAX_DISTANCE_METERS = 4000;
 
 // Direkte Darstellungsgrößen
 const MARKER_RADIUS = 8;
