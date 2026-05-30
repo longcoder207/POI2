@@ -8,7 +8,7 @@ const MAX_DISTANCE_METERS = 1500;
 
 // Direkte Darstellungsgrößen
 const MARKER_RADIUS = 8;
-const LABEL_HEIGHT_ABOVE_MARKER = 24;
+const LABEL_HEIGHT_ABOVE_MARKER = 45;
 
 // Größe des Canvas-Labels in der AR-Szene
 const LABEL_IMAGE_WIDTH = 140;
