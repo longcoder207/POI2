@@ -187,5 +187,32 @@
     "category": "test",
     "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
     "icon": "default"
+  },
+{
+    "id": "022",
+    "name": "Abis",
+    "latitude": 51.107058,
+    "longitude":7.639064,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  },
+{
+    "id": "023",
+    "name": "Alte Schule",
+    "latitude": 51.111399,
+    "longitude": 7.647268,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  },
+{
+    "id": "024",
+    "name": "Grothe",
+    "latitude": 51.111279,
+    "longitude": 7.649989,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
   }
 ]
