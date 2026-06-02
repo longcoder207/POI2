@@ -214,5 +214,32 @@
     "category": "test",
     "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
     "icon": "default"
+  },
+{
+    "id": "025",
+    "name": "Parkplatz",
+    "latitude": 51.448239,
+    "longitude": 7.271428,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  },
+{
+    "id": "026",
+    "name": "Mensa",
+    "latitude": 51.446232,
+    "longitude": 7.272244,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
+  },
+{
+    "id": "027",
+    "name": "Wald",
+    "latitude": 51.446780,
+    "longitude": 7.269672,
+    "category": "test",
+    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "icon": "default"
   }
 ]
