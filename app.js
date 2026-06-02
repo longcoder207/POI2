@@ -4,15 +4,20 @@
 
 // POIs werden nur angezeigt, wenn sie innerhalb dieses Radius liegen.
 // Für Tests kannst du den Wert z. B. auf 100000 setzen.
-const MAX_DISTANCE_METERS = 4000;
+const MAX_DISTANCE_METERS = 1500;
 
-// Direkte Darstellungsgrößen
-const MARKER_RADIUS = 8;
-const LABEL_HEIGHT_ABOVE_MARKER = 45;
+// Marker-Größe abhängig von Entfernung
+// Kleine Werte = kleinere Kugeln
+const MARKER_MIN_RADIUS = 0.8;
+const MARKER_MAX_RADIUS = 4.0;
+const MARKER_DISTANCE_FACTOR = 0.01;
+
+// Label-Höhe abhängig von Markergröße
+const LABEL_HEIGHT_FACTOR = 4.0;
 
 // Größe des Canvas-Labels in der AR-Szene
-const LABEL_IMAGE_WIDTH = 140;
-const LABEL_IMAGE_HEIGHT = 44;
+const LABEL_IMAGE_WIDTH = 90;
+const LABEL_IMAGE_HEIGHT = 28;
 
 // Größe des intern erzeugten Canvas-Bildes
 const LABEL_CANVAS_WIDTH = 1400;
@@ -332,15 +337,20 @@ function createPoiEntity(poi) {
   wrapper.classList.add("poi-entity");
   wrapper.classList.add("clickable");
 
+  const markerRadius = getMarkerRadius(poi.distance);
+
   // Gelber POI-Punkt
   const marker = document.createElement("a-sphere");
-  marker.setAttribute("radius", String(MARKER_RADIUS));
+  marker.setAttribute("radius", String(markerRadius));
   marker.setAttribute("color", "#ffcc00");
   marker.setAttribute("position", "0 0 0");
 
+  // Labelhöhe automatisch passend zur Kugelgröße
+  const labelHeight = markerRadius * LABEL_HEIGHT_FACTOR;
+
   // Gruppe für Canvas-Label
   const labelGroup = document.createElement("a-entity");
-  labelGroup.setAttribute("position", `0 ${LABEL_HEIGHT_ABOVE_MARKER} 0`);
+  labelGroup.setAttribute("position", `0 ${labelHeight} 0`);
   labelGroup.setAttribute("look-at", "[gps-camera]");
 
   // Canvas-Text als Bild erzeugen
@@ -365,7 +375,9 @@ function createPoiEntity(poi) {
 
   console.log("POI mit Canvas-Label erstellt:", {
     name: poi.name,
-    distance: poi.distance
+    distance: poi.distance,
+    markerRadius,
+    labelHeight
   });
 
   return wrapper;
@@ -391,7 +403,7 @@ function createTextLabelImage(text) {
   roundRect(ctx, 0, 0, canvas.width, canvas.height, radius);
   ctx.fill();
 
-  // Text vorbereiten
+  // Text
   const safeText = String(text || "POI");
 
   ctx.fillStyle = "#ffffff";
@@ -458,6 +470,16 @@ function hidePoiPanel() {
 
 function setStatus(message) {
   statusEl.innerHTML = message;
+}
+
+function getMarkerRadius(distance) {
+  const safeDistance = Number(distance) || 0;
+  const radius = MARKER_MIN_RADIUS + safeDistance * MARKER_DISTANCE_FACTOR;
+
+  return Math.min(
+    MARKER_MAX_RADIUS,
+    Math.max(MARKER_MIN_RADIUS, radius)
+  );
 }
 
 function distanceInMeters(lat1, lon1, lat2, lon2) {
