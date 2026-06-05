@@ -6,23 +6,26 @@
 // Für Tests kannst du den Wert z. B. auf 100000 setzen.
 const MAX_DISTANCE_METERS = 1500;
 
-// Marker-Größe abhängig von Entfernung
+// Marker-Größe abhängig von Entfernung.
 // MARKER_MIN_RADIUS regelt nahe Punkte.
 // MARKER_MAX_RADIUS regelt entfernte Punkte.
 // MARKER_DISTANCE_FACTOR regelt, wie schnell die Kugel mit Entfernung wächst.
-const MARKER_MIN_RADIUS = 0.8;
-const MARKER_MAX_RADIUS = 4.0;
-const MARKER_DISTANCE_FACTOR = 0.01;
+const MARKER_MIN_RADIUS = 0.5;
+const MARKER_MAX_RADIUS = 2.0;
+const MARKER_DISTANCE_FACTOR = 0.004;
 
-// Label-Position abhängig von Markergröße
-const LABEL_HEIGHT_FACTOR = 4.0;
+// Label-Position abhängig von Markergröße.
+const LABEL_HEIGHT_FACTOR = 3.2;
 
-// Label-Größe abhängig von Markergröße
-// Diese Werte sorgen dafür, dass Text und Feld mit der Kugel mitskalieren.
-const LABEL_WIDTH_FACTOR = 26;
-const LABEL_HEIGHT_FACTOR_AR = 8;
+// Label-Größe mit Begrenzung.
+// Dadurch skaliert der Text mit der Kugel,
+// wird aber nicht mehr gigantisch groß.
+const LABEL_MIN_WIDTH = 12;
+const LABEL_MAX_WIDTH = 28;
+const LABEL_MIN_HEIGHT = 4;
+const LABEL_MAX_HEIGHT = 9;
 
-// Größe des intern erzeugten Canvas-Bildes
+// Größe des intern erzeugten Canvas-Bildes.
 // Diese Werte bestimmen die Textqualität innerhalb des Labels.
 const LABEL_CANVAS_WIDTH = 1400;
 const LABEL_CANVAS_HEIGHT = 440;
@@ -352,9 +355,11 @@ function createPoiEntity(poi) {
   // Labelhöhe automatisch passend zur Kugelgröße
   const labelY = markerRadius * LABEL_HEIGHT_FACTOR;
 
-  // Labelgröße automatisch passend zur Kugelgröße
-  const labelWidth = markerRadius * LABEL_WIDTH_FACTOR;
-  const labelHeight = markerRadius * LABEL_HEIGHT_FACTOR_AR;
+  // Labelgröße automatisch passend zur Kugelgröße,
+  // aber mit Mindest- und Maximalwerten begrenzt.
+  const labelSize = getLabelSize(markerRadius);
+  const labelWidth = labelSize.width;
+  const labelHeight = labelSize.height;
 
   // Gruppe für Canvas-Label
   const labelGroup = document.createElement("a-entity");
@@ -490,6 +495,16 @@ function getMarkerRadius(distance) {
     MARKER_MAX_RADIUS,
     Math.max(MARKER_MIN_RADIUS, radius)
   );
+}
+
+function getLabelSize(markerRadius) {
+  const width = markerRadius * 10;
+  const height = markerRadius * 3;
+
+  return {
+    width: Math.min(LABEL_MAX_WIDTH, Math.max(LABEL_MIN_WIDTH, width)),
+    height: Math.min(LABEL_MAX_HEIGHT, Math.max(LABEL_MIN_HEIGHT, height))
+  };
 }
 
 function distanceInMeters(lat1, lon1, lat2, lon2) {
