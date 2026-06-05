@@ -10,9 +10,9 @@ const MAX_DISTANCE_METERS = 1500;
 // MARKER_MIN_RADIUS regelt nahe Punkte.
 // MARKER_MAX_RADIUS regelt entfernte Punkte.
 // MARKER_DISTANCE_FACTOR regelt, wie schnell die Kugel mit Entfernung wächst.
-const MARKER_MIN_RADIUS = 0.5;
-const MARKER_MAX_RADIUS = 2.0;
-const MARKER_DISTANCE_FACTOR = 0.004;
+const MARKER_MIN_RADIUS = 0.45;
+const MARKER_MAX_RADIUS = 5.0;
+const MARKER_DISTANCE_FACTOR = 0.01;
 
 // Label-Position abhängig von Markergröße.
 const LABEL_HEIGHT_FACTOR = 3.2;
@@ -21,9 +21,9 @@ const LABEL_HEIGHT_FACTOR = 3.2;
 // Dadurch skaliert der Text mit der Kugel,
 // wird aber nicht mehr gigantisch groß.
 const LABEL_MIN_WIDTH = 12;
-const LABEL_MAX_WIDTH = 28;
+const LABEL_MAX_WIDTH = 55;
 const LABEL_MIN_HEIGHT = 4;
-const LABEL_MAX_HEIGHT = 9;
+const LABEL_MAX_HEIGHT = 18;
 
 // Größe des intern erzeugten Canvas-Bildes.
 // Diese Werte bestimmen die Textqualität innerhalb des Labels.
