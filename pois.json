@@ -243,28 +243,28 @@
     "icon": "default"
   },
 {
-    "id": "027",
-    "name": "Wald",
-    "latitude": 51.446780,
-    "longitude": 7.269672,
+    "id": "028",
+    "name": "Ascheplatz",
+    "latitude": 51.286897,
+    "longitude": 7.197641,
     "category": "test",
     "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
     "icon": "default"
   },
 {
-    "id": "027",
-    "name": "Wald",
-    "latitude": 51.446780,
-    "longitude": 7.269672,
+    "id": "029",
+    "name": "Stonehenge",
+    "latitude": 51.284071971645595,
+    "longitude": 7.193660539216541,
     "category": "test",
     "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
     "icon": "default"
   },
 {
-    "id": "027",
-    "name": "Wald",
-    "latitude": 51.446780,
-    "longitude": 7.269672,
+    "id": "030",
+    "name": "Skywalk",
+    "latitude": 51.2855304709999,
+    "longitude": 7.20410650218383,
     "category": "test",
     "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
     "icon": "default"
