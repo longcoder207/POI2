@@ -7,19 +7,23 @@
 const MAX_DISTANCE_METERS = 1500;
 
 // Marker-Größe abhängig von Entfernung
-// Kleine Werte = kleinere Kugeln
+// MARKER_MIN_RADIUS regelt nahe Punkte.
+// MARKER_MAX_RADIUS regelt entfernte Punkte.
+// MARKER_DISTANCE_FACTOR regelt, wie schnell die Kugel mit Entfernung wächst.
 const MARKER_MIN_RADIUS = 0.8;
 const MARKER_MAX_RADIUS = 4.0;
 const MARKER_DISTANCE_FACTOR = 0.01;
 
-// Label-Höhe abhängig von Markergröße
+// Label-Position abhängig von Markergröße
 const LABEL_HEIGHT_FACTOR = 4.0;
 
-// Größe des Canvas-Labels in der AR-Szene
-const LABEL_IMAGE_WIDTH = 90;
-const LABEL_IMAGE_HEIGHT = 28;
+// Label-Größe abhängig von Markergröße
+// Diese Werte sorgen dafür, dass Text und Feld mit der Kugel mitskalieren.
+const LABEL_WIDTH_FACTOR = 26;
+const LABEL_HEIGHT_FACTOR_AR = 8;
 
 // Größe des intern erzeugten Canvas-Bildes
+// Diese Werte bestimmen die Textqualität innerhalb des Labels.
 const LABEL_CANVAS_WIDTH = 1400;
 const LABEL_CANVAS_HEIGHT = 440;
 const LABEL_CANVAS_FONT_SIZE = 170;
@@ -346,11 +350,15 @@ function createPoiEntity(poi) {
   marker.setAttribute("position", "0 0 0");
 
   // Labelhöhe automatisch passend zur Kugelgröße
-  const labelHeight = markerRadius * LABEL_HEIGHT_FACTOR;
+  const labelY = markerRadius * LABEL_HEIGHT_FACTOR;
+
+  // Labelgröße automatisch passend zur Kugelgröße
+  const labelWidth = markerRadius * LABEL_WIDTH_FACTOR;
+  const labelHeight = markerRadius * LABEL_HEIGHT_FACTOR_AR;
 
   // Gruppe für Canvas-Label
   const labelGroup = document.createElement("a-entity");
-  labelGroup.setAttribute("position", `0 ${labelHeight} 0`);
+  labelGroup.setAttribute("position", `0 ${labelY} 0`);
   labelGroup.setAttribute("look-at", "[gps-camera]");
 
   // Canvas-Text als Bild erzeugen
@@ -358,8 +366,8 @@ function createPoiEntity(poi) {
 
   const labelImage = document.createElement("a-image");
   labelImage.setAttribute("src", labelImageUrl);
-  labelImage.setAttribute("width", String(LABEL_IMAGE_WIDTH));
-  labelImage.setAttribute("height", String(LABEL_IMAGE_HEIGHT));
+  labelImage.setAttribute("width", String(labelWidth));
+  labelImage.setAttribute("height", String(labelHeight));
   labelImage.setAttribute("side", "double");
   labelImage.setAttribute("transparent", "true");
   labelImage.setAttribute("position", "0 0 0");
@@ -377,6 +385,8 @@ function createPoiEntity(poi) {
     name: poi.name,
     distance: poi.distance,
     markerRadius,
+    labelY,
+    labelWidth,
     labelHeight
   });
 
