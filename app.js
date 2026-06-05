@@ -10,7 +10,7 @@ const MAX_DISTANCE_METERS = 4000;
 // MARKER_MIN_RADIUS regelt nahe Punkte.
 // MARKER_MAX_RADIUS regelt entfernte Punkte.
 // MARKER_DISTANCE_FACTOR regelt, wie schnell die Kugel mit Entfernung wächst.
-const MARKER_MIN_RADIUS = 0.45;
+const MARKER_MIN_RADIUS = 0.8;
 const MARKER_MAX_RADIUS = 5.0;
 const MARKER_DISTANCE_FACTOR = 0.01;
 
