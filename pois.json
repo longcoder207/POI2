@@ -14,7 +14,7 @@
     "latitude": 51.128482,
     "longitude": 7.612168,
     "category": "test",
-    "description": "Dies ist ein zweiter Beispielpunkt mit eigener Beschreibung.",
+    "description": "Dies ist ein zweiter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -23,7 +23,7 @@
     "latitude": 51.130548,
     "longitude": 7.61625,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -32,7 +32,7 @@
     "latitude": 51.134668,
     "longitude": 7.62411,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -41,7 +41,7 @@
     "latitude": 51.128788,
     "longitude": 7.59268,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -50,7 +50,7 @@
     "latitude": 51.127966,
     "longitude": 7.584887,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -59,7 +59,7 @@
     "latitude": 51.124815,
     "longitude": 7.585762,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -68,7 +68,7 @@
     "latitude": 51.078801,
     "longitude": 7.802477,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -77,7 +77,7 @@
     "latitude": 51.077747,
     "longitude": 7.774393,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -86,7 +86,7 @@
     "latitude": 51.076394,
     "longitude": 7.799381,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -95,7 +95,7 @@
     "latitude": 51.106825,
     "longitude": 7.678017,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -104,7 +104,7 @@
     "latitude": 51.101189,
     "longitude": 7.678699,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -113,7 +113,7 @@
     "latitude": 51.106042,
     "longitude": 7.660348,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -122,7 +122,7 @@
     "latitude": 51.089681,
     "longitude": 7.598088,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -131,7 +131,7 @@
     "latitude": 51.092098,
     "longitude": 7.589819,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -140,7 +140,7 @@
     "latitude": 51.093266,
     "longitude": 7.600782,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
  {
@@ -149,7 +149,7 @@
   "latitude": 51.444931,
   "longitude": 7.227756,
   "category": "test",
-  "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+  "description": "Dies ist ein dritter Beispielpunkt",
   "icon": "default"
 },
 {
@@ -158,7 +158,7 @@
   "latitude": 51.443971,
   "longitude": 7.231115,
   "category": "test",
-  "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+  "description": "Dies ist ein dritter Beispielpunkt",
   "icon": "default"
 },
 {
@@ -167,7 +167,7 @@
   "latitude": 51.446706,
   "longitude": 7.231944,
   "category": "test",
-  "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+  "description": "Dies ist ein dritter Beispielpunkt",
   "icon": "default"
 },
 {
@@ -176,7 +176,7 @@
     "latitude": 51.178749,
     "longitude": 7.742933,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
   {
@@ -185,7 +185,7 @@
     "latitude": 51.180428,
     "longitude": 7.74928,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -194,7 +194,7 @@
     "latitude": 51.107058,
     "longitude":7.639064,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -203,7 +203,7 @@
     "latitude": 51.111399,
     "longitude": 7.647268,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -212,7 +212,7 @@
     "latitude": 51.111279,
     "longitude": 7.649989,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -221,7 +221,7 @@
     "latitude": 51.448239,
     "longitude": 7.271428,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -230,7 +230,7 @@
     "latitude": 51.446232,
     "longitude": 7.272244,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -239,7 +239,7 @@
     "latitude": 51.446780,
     "longitude": 7.269672,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -257,7 +257,7 @@
     "latitude": 51.284071971645595,
     "longitude": 7.193660539216541,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   },
 {
@@ -266,7 +266,16 @@
     "latitude": 51.2855304709999,
     "longitude": 7.20410650218383,
     "category": "test",
-    "description": "Dies ist ein dritter Beispielpunkt für deine POI-App.",
+    "description": "Dies ist ein dritter Beispielpunkt",
+    "icon": "default"
+  },
+  {
+    "id": "031",
+    "name": "FeelgoodArena",
+    "latitude": 51.17414895333436,
+    "longitude": 7.752264668847033,
+    "category": "test"
+    "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   }
 ]
