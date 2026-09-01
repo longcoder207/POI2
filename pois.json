@@ -274,7 +274,7 @@
     "name": "FeelgoodArena",
     "latitude": 51.17414895333436,
     "longitude": 7.752264668847033,
-    "category": "test"
+    "category": "test",
     "description": "Dies ist ein dritter Beispielpunkt",
     "icon": "default"
   }
